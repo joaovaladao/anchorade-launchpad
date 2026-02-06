@@ -1,73 +1,156 @@
-# Welcome to your Lovable project
+# 🏪 Anchorade
 
-## Project info
+**Marketplace local focado em proximidade geográfica**
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Anchorade é um marketplace de produtos físicos com foco em itens locais — alimentos, artesanato, suprimentos — onde compradores encontram vendedores próximos através de busca por localização.
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ Funcionalidades Planejadas
 
-**Use Lovable**
+### Para Compradores
+- 🔍 Busca de produtos por proximidade geográfica
+- 📍 Filtros por categoria, preço e distância
+- 🗺️ Visualização em mapa dos vendedores próximos
+- ⭐ Avaliações e reviews de produtos e vendedores
+- 🛒 Carrinho de compras e histórico de pedidos
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+### Para Vendedores
+- 📦 Cadastro e gerenciamento de produtos
+- 📊 Dashboard com métricas de vendas
+- 📍 Configuração de área de atuação/entrega
+- 💬 Sistema de mensagens com compradores
 
-Changes made via Lovable will be committed automatically to this repo.
+### Sistema
+- 🔐 Autenticação segura (email/senha, OAuth)
+- 💳 Integração com gateway de pagamentos
+- 📱 Design responsivo (mobile-first)
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🛠️ Stack Tecnológica
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+| Camada | Tecnologia |
+|--------|------------|
+| **Frontend** | React 18 + TypeScript |
+| **Estilização** | Tailwind CSS + shadcn/ui |
+| **Roteamento** | React Router v6 |
+| **Estado** | TanStack Query + React Context |
+| **Backend** | Supabase (PostgreSQL + Auth + Storage) |
+| **Mapas** | Leaflet / Mapbox (a definir) |
+| **Pagamentos** | Stripe (a definir) |
 
-Follow these steps:
+---
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 📁 Estrutura do Projeto
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```
+src/
+├── components/
+│   ├── ui/              # Componentes base (shadcn/ui)
+│   ├── layout/          # Header, Footer, Sidebar, Navigation
+│   ├── auth/            # Componentes de autenticação
+│   ├── products/        # Cards, listagens, formulários de produtos
+│   ├── vendors/         # Perfil e componentes de vendedores
+│   ├── search/          # Busca e filtros
+│   └── map/             # Componentes de mapa/localização
+├── pages/
+│   ├── auth/            # Login, Registro, Recuperar senha
+│   ├── products/        # Listagem, Detalhes, Cadastro
+│   ├── vendors/         # Perfil público, Dashboard do vendedor
+│   └── user/            # Configurações, Meus pedidos
+├── hooks/               # Hooks customizados
+├── lib/                 # Utilitários e helpers
+├── types/               # Definições TypeScript
+├── contexts/            # Contexts React (auth, cart, location)
+└── services/            # Integrações com API/Supabase
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## 🚀 Como Rodar Localmente
+
+### Pré-requisitos
+- Node.js 18+ 
+- npm ou bun
+
+### Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/anchorade.git
+
+# Entre na pasta do projeto
+cd anchorade
+
+# Instale as dependências
+npm install
+
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+O app estará disponível em `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## 📋 Roadmap
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Fase 1 - Fundação ✅
+- [x] Estrutura de pastas
+- [x] Documentação inicial
 
-## What technologies are used for this project?
+### Fase 2 - Autenticação
+- [ ] Configuração do Supabase
+- [ ] Login/Registro de usuários
+- [ ] Perfil do usuário
 
-This project is built with:
+### Fase 3 - Produtos
+- [ ] CRUD de produtos
+- [ ] Upload de imagens
+- [ ] Categorização
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Fase 4 - Geolocalização
+- [ ] Integração com API de mapas
+- [ ] Busca por proximidade
+- [ ] Área de atuação do vendedor
 
-## How can I deploy this project?
+### Fase 5 - Transações
+- [ ] Carrinho de compras
+- [ ] Integração com pagamentos
+- [ ] Sistema de pedidos
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+### Fase 6 - Social
+- [ ] Avaliações e reviews
+- [ ] Sistema de mensagens
+- [ ] Notificações
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 🤝 Contribuição
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Contribuições são bem-vindas! Para contribuir:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 📞 Contato
+
+Tem alguma dúvida ou sugestão? Abra uma [issue](https://github.com/seu-usuario/anchorade/issues) no repositório.
+
+---
+
+<p align="center">
+  Feito com ❤️ para conectar comunidades locais
+</p>
