@@ -1,4 +1,4 @@
-import { Anchor, Waves, Ship, MapPin, ChevronRight, Zap, Compass } from 'lucide-react';
+import { Anchor, Ship, MapPin, ChevronRight, Zap, Compass } from 'lucide-react';
 import { useState } from 'react';
 
 interface EntryScreenProps {
@@ -9,7 +9,7 @@ interface EntryScreenProps {
 }
 
 export default function EntryScreen({ onExplore, onBecomeSailor, onLogin, onSignUp }: EntryScreenProps) {
-  const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+  const [, setHoveredFeature] = useState<number | null>(null);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-sky-950 to-slate-900 overflow-hidden relative">
