@@ -76,19 +76,22 @@ export default function EntryScreen({ onExplore, onBecomeSailor, onLogin, onSign
               {[
                 {
                   icon: Ship,
-                  color: 'sky',
+                  bgClass: 'bg-sky-500/20 group-hover:bg-sky-500/30',
+                  iconClass: 'text-sky-400',
                   title: 'For Explorers',
                   desc: 'Find authentic local products as you sail between islands and coastal communities'
                 },
                 {
                   icon: MapPin,
-                  color: 'cyan',
+                  bgClass: 'bg-cyan-500/20 group-hover:bg-cyan-500/30',
+                  iconClass: 'text-cyan-400',
                   title: 'Location Powered',
                   desc: 'Discover sellers nearby in real-time. Perfect for sailors and island hoppers'
                 },
                 {
                   icon: Zap,
-                  color: 'amber',
+                  bgClass: 'bg-amber-500/20 group-hover:bg-amber-500/30',
+                  iconClass: 'text-amber-400',
                   title: 'Instant Trading',
                   desc: 'Seamless commerce experience built for the water and wireless connectivity'
                 }
@@ -101,8 +104,8 @@ export default function EntryScreen({ onExplore, onBecomeSailor, onLogin, onSign
                 >
                   <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-cyan-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-smooth"></div>
                   <div className="relative">
-                    <div className={`inline-flex p-3 bg-${feature.color}-500/20 rounded-xl mb-4 group-hover:bg-${feature.color}-500/30 transition-smooth`}>
-                      <feature.icon className={`text-${feature.color}-400`} size={32} />
+                    <div className={`inline-flex p-3 rounded-xl mb-4 transition-smooth ${feature.bgClass}`}>
+                      <feature.icon className={feature.iconClass} size={32} />
                     </div>
                     <h3 className="text-lg font-semibold text-white mb-2">
                       {feature.title}
