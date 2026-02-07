@@ -1,5 +1,5 @@
 import { MapPin, AlertCircle, CheckCircle, Loader } from 'lucide-react';
-import { useUserLocation, LocationStatus } from '../hooks/useUserLocation';
+import { useUserLocation } from '../hooks/useUserLocation';
 
 interface LocationPermissionProps {
   onLocationGranted: (latitude: number, longitude: number) => void;
