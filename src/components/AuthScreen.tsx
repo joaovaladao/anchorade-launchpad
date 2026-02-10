@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Anchor, ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 interface AuthScreenProps {
   onBack: () => void;
@@ -7,9 +8,13 @@ interface AuthScreenProps {
 }
 
 export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreenProps) {
+  const { signIn, signUp } = useAuth();
   const [isLogin, setIsLogin] = useState(initialMode === 'login');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
   const [registerForm, setRegisterForm] = useState({
@@ -19,12 +24,59 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
     confirmPassword: ''
   });
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    if (!loginForm.email.trim() || !loginForm.password) {
+      setError('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
+
+    const { error } = await signIn(loginForm.email.trim(), loginForm.password);
+    if (error) {
+      setError(error.message);
+    }
+    setLoading(false);
   };
 
-  const handleRegisterSubmit = (e: React.FormEvent) => {
+  const handleRegisterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    if (!registerForm.fullName.trim() || !registerForm.email.trim() || !registerForm.password) {
+      setError('Please fill in all fields');
+      setLoading(false);
+      return;
+    }
+
+    if (registerForm.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      setLoading(false);
+      return;
+    }
+
+    if (registerForm.password !== registerForm.confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    const { error } = await signUp(
+      registerForm.email.trim(),
+      registerForm.password,
+      registerForm.fullName.trim()
+    );
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setSuccessMessage('Check your email to confirm your account before logging in.');
+    }
+    setLoading(false);
   };
 
   return (
@@ -76,9 +128,21 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
               </h1>
               <p className="text-center text-sky-200/70 text-sm mb-8">
                 {isLogin
-                  ? 'Log in to explore the maritime marketplace'
-                  : 'Start your sailing adventure and connect with local sellers'}
+                  ? 'Log in to access your seller dashboard'
+                  : 'Start your sailing adventure and sell your products'}
               </p>
+
+              {error && (
+                <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-300 text-sm text-center">
+                  {error}
+                </div>
+              )}
+
+              {successMessage && (
+                <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-300 text-sm text-center">
+                  {successMessage}
+                </div>
+              )}
 
               {isLogin ? (
                 <form onSubmit={handleLoginSubmit} className="space-y-5">
@@ -115,9 +179,10 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
 
                   <button
                     type="submit"
-                    className="button-hover-glow w-full mt-8 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-smooth"
+                    disabled={loading}
+                    className="button-hover-glow w-full mt-8 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-smooth disabled:opacity-50"
                   >
-                    Log in
+                    {loading ? 'Signing in...' : 'Log in'}
                   </button>
 
                   <div className="relative my-6">
@@ -133,7 +198,7 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
                     Don't have an account?{' '}
                     <button
                       type="button"
-                      onClick={() => setIsLogin(false)}
+                      onClick={() => { setIsLogin(false); setError(''); setSuccessMessage(''); }}
                       className="text-sky-300 hover:text-sky-200 font-semibold transition-smooth"
                     >
                       Become a Sailor
@@ -155,6 +220,7 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
                       value={registerForm.fullName}
                       onChange={(e) => setRegisterForm({ ...registerForm, fullName: e.target.value })}
                       placeholder="Your name"
+                      maxLength={100}
                       className="w-full px-4 py-3 bg-slate-900/50 border border-sky-500/30 rounded-xl text-white placeholder-sky-300/50 focus:outline-none focus:border-sky-400/60 focus:bg-slate-900/70 focus:shadow-lg focus:shadow-sky-500/20 transition-smooth"
                     />
                   </div>
@@ -212,9 +278,10 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
 
                   <button
                     type="submit"
-                    className="button-hover-glow w-full mt-8 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-smooth"
+                    disabled={loading}
+                    className="button-hover-glow w-full mt-8 px-6 py-3 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transition-smooth disabled:opacity-50"
                   >
-                    Create Sailor Account
+                    {loading ? 'Creating account...' : 'Create Sailor Account'}
                   </button>
 
                   <div className="relative my-6">
@@ -230,7 +297,7 @@ export default function AuthScreen({ onBack, initialMode = 'login' }: AuthScreen
                     Already have an account?{' '}
                     <button
                       type="button"
-                      onClick={() => setIsLogin(true)}
+                      onClick={() => { setIsLogin(true); setError(''); setSuccessMessage(''); }}
                       className="text-sky-300 hover:text-sky-200 font-semibold transition-smooth"
                     >
                       Log in

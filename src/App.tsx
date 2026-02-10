@@ -2,11 +2,33 @@ import { useState } from 'react';
 import EntryScreen from './components/EntryScreen';
 import ProductDiscovery from './components/ProductDiscovery';
 import AuthScreen from './components/AuthScreen';
+import SellerDashboard from './components/SellerDashboard';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
+  const { user, loading, signOut } = useAuth();
   const [currentScreen, setCurrentScreen] = useState<'entry' | 'discovery' | 'auth'>('entry');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
+  const handleSignOut = async () => {
+    await signOut();
+    setCurrentScreen('entry');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-900 via-sky-950 to-slate-900 flex items-center justify-center">
+        <div className="text-sky-300 animate-pulse">Loading...</div>
+      </div>
+    );
+  }
+
+  // If logged in, show dashboard
+  if (user) {
+    return <SellerDashboard user={user} onSignOut={handleSignOut} />;
+  }
+
+  // Public experience
   return (
     <>
       {currentScreen === 'entry' ? (
