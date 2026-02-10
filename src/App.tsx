@@ -3,10 +3,12 @@ import EntryScreen from './components/EntryScreen';
 import ProductDiscovery from './components/ProductDiscovery';
 import AuthScreen from './components/AuthScreen';
 import SellerDashboard from './components/SellerDashboard';
+// import UserProfile from './components/UserProfile';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
   const { user, loading, signOut } = useAuth();
+
   const [currentScreen, setCurrentScreen] = useState<'entry' | 'discovery' | 'auth'>('entry');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
