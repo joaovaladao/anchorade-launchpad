@@ -12,6 +12,7 @@ interface Product {
   image_url: string | null;
   is_active: boolean;
   is_mobile_seller: boolean;
+  available_quantity: number;
   created_at: string;
 }
 
@@ -22,6 +23,7 @@ interface ProductForm {
   category: string;
   image_url: string;
   is_mobile_seller: boolean;
+  available_quantity: string;
 }
 
 const emptyForm: ProductForm = {
@@ -31,6 +33,7 @@ const emptyForm: ProductForm = {
   category: 'food',
   image_url: '',
   is_mobile_seller: false,
+  available_quantity: '1',
 };
 
 const categories = [
@@ -55,16 +58,27 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
   const [error, setError] = useState('');
 
   const fetchMyProducts = async () => {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('seller_id', user.id)
-      .order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('products')
+    .select(`
+      id,
+      title,
+      description,
+      price,
+      category,
+      image_url,
+      is_active,
+      is_mobile_seller,
+      available_quantity,
+      created_at
+    `)
+    .eq('seller_id', user.id)
+    .order('created_at', { ascending: false });
 
     if (error) {
       console.error('Error fetching products:', error);
     } else {
-      setProducts((data as Product[]) || []);
+      setProducts(data ?? []);
     }
     setLoading(false);
   };
@@ -88,6 +102,7 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
       category: product.category,
       image_url: product.image_url || '',
       is_mobile_seller: product.is_mobile_seller,
+      available_quantity: product.available_quantity.toString(),
     });
     setEditingId(product.id);
     setShowForm(true);
@@ -104,6 +119,11 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
       setError('Please enter a valid price');
       return;
     }
+    const quantity = parseInt(form.available_quantity, 10);
+    if (isNaN(quantity) || quantity < 0) {
+      setError('Please enter a valid quantity');
+      return;
+    }
 
     setSaving(true);
     setError('');
@@ -115,6 +135,7 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
       category: form.category,
       image_url: form.image_url.trim() || null,
       is_mobile_seller: form.is_mobile_seller,
+      available_quantity: quantity,
       seller_id: user.id,
     };
 
@@ -316,6 +337,57 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
                 />
               </div>
 
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-sky-100 mb-2">
+                    Price ($) *
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={form.price}
+                    onChange={(e) => setForm({ ...form, price: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-sky-500/30 rounded-xl text-white"
+                    placeholder="0.00"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-sky-100 mb-2">
+                    Quantity *
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={form.available_quantity}
+                    onChange={(e) =>
+                      setForm({ ...form, available_quantity: e.target.value })
+                    }
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-sky-500/30 rounded-xl text-white"
+                    placeholder="0"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-sky-100 mb-2">
+                    Category
+                  </label>
+                  <select
+                    value={form.category}
+                    onChange={(e) => setForm({ ...form, category: e.target.value })}
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-sky-500/30 rounded-xl text-white"
+                  >
+                    {categories.map((c) => (
+                      <option key={c.value} value={c.value}>
+                        {c.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+{/* 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-sky-100 mb-2">Price ($) *</label>
@@ -341,7 +413,7 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
                     ))}
                   </select>
                 </div>
-              </div>
+              </div> */}
 
               <div>
                 <label className="block text-sm font-medium text-sky-100 mb-2">Image URL</label>
