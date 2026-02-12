@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN available_quantity integer NOT NULL DEFAULT 1;

@@ -3,13 +3,14 @@ import EntryScreen from './components/EntryScreen';
 import ProductDiscovery from './components/ProductDiscovery';
 import AuthScreen from './components/AuthScreen';
 import SellerDashboard from './components/SellerDashboard';
-// import UserProfile from './components/UserProfile';
+import UserProfile from './components/UserProfile';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
   const { user, loading, signOut } = useAuth();
 
   const [currentScreen, setCurrentScreen] = useState<'entry' | 'discovery' | 'auth'>('entry');
+  const [showProfile, setShowProfile] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   const handleSignOut = async () => {
@@ -25,9 +26,24 @@ function App() {
     );
   }
 
-  // If logged in, show dashboard
+  // If logged in, show dashboard or profile
   if (user) {
-    return <SellerDashboard user={user} onSignOut={handleSignOut} />;
+    if (showProfile) {
+      return (
+        <UserProfile
+          user={user}
+          onBack={() => setShowProfile(false)}
+          onSignOut={handleSignOut}
+        />
+      );
+    }
+    return (
+      <SellerDashboard
+        user={user}
+        onSignOut={handleSignOut}
+        onProfileClick={() => setShowProfile(true)}
+      />
+    );
   }
 
   // Public experience

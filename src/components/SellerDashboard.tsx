@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Anchor, Plus, Pencil, Trash2, LogOut, Package, X, Check } from 'lucide-react';
+import { Plus, Pencil, Trash2, LogOut, Package, X, Check, User as UserIcon } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
 interface Product {
@@ -46,9 +46,10 @@ const categories = [
 interface SellerDashboardProps {
   user: User;
   onSignOut: () => void;
+  onProfileClick: () => void;
 }
 
-export default function SellerDashboard({ user, onSignOut }: SellerDashboardProps) {
+export default function SellerDashboard({ user, onSignOut, onProfileClick }: SellerDashboardProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -181,9 +182,13 @@ export default function SellerDashboard({ user, onSignOut }: SellerDashboardProp
         <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-sky-500/10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-sky-600 to-sky-700 rounded-lg border border-sky-400/30">
-                <Anchor className="text-white" size={24} strokeWidth={1.5} />
-              </div>
+              <button
+                onClick={onProfileClick}
+                className="p-2 bg-gradient-to-br from-sky-600 to-sky-700 rounded-lg border border-sky-400/30 hover:from-sky-500 hover:to-sky-600 transition-all"
+                title="My Account"
+              >
+                <UserIcon className="text-white" size={24} strokeWidth={1.5} />
+              </button>
               <div>
                 <h1 className="text-lg font-bold text-white">Seller Dashboard</h1>
                 <p className="text-sky-300/70 text-xs">{displayName}</p>
