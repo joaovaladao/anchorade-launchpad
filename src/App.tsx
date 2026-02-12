@@ -31,7 +31,15 @@ function App() {
   if (user) {
     if (showDiscoveryAsUser) {
       return (
-        <ProductDiscovery onBack={() => setShowDiscoveryAsUser(false)} />
+        <ProductDiscovery
+          onBack={() => setShowDiscoveryAsUser(false)}
+          user={user}
+          onSignOut={handleSignOut}
+          onProfileClick={() => {
+            setShowDiscoveryAsUser(false);
+            setShowProfile(true);
+          }}
+        />
       );
     }
     if (showProfile) {
@@ -73,7 +81,18 @@ function App() {
           }}
         />
       ) : currentScreen === 'discovery' ? (
-        <ProductDiscovery onBack={() => setCurrentScreen('entry')} />
+        <ProductDiscovery
+          onBack={() => setCurrentScreen('entry')}
+          user={null}
+          onLogin={() => {
+            setAuthMode('login');
+            setCurrentScreen('auth');
+          }}
+          onSignUp={() => {
+            setAuthMode('register');
+            setCurrentScreen('auth');
+          }}
+        />
       ) : (
         <AuthScreen onBack={() => setCurrentScreen('entry')} initialMode={authMode} />
       )}
