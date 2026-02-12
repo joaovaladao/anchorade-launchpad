@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, MapPin, Compass, Navigation } from 'lucide-react';
+import { ArrowLeft, MapPin, Compass, Navigation, LogOut, User as UserIcon, LogIn, UserPlus } from 'lucide-react';
 import HorizontalSection from './HorizontalSection';
 import ProductCard from './ProductCard';
 import ProductModal from './ProductModal';
 import LocationPermission from './LocationPermission';
 import { Product, Section } from '../types';
 import { fetchProducts } from '../services/supabase';
+import type { User } from '@supabase/supabase-js';
 
 interface ProductDiscoveryProps {
   onBack: () => void;
+  user?: User | null;
+  onSignOut?: () => void;
+  onProfileClick?: () => void;
+  onLogin?: () => void;
+  onSignUp?: () => void;
 }
 
 interface UserLocation {
@@ -16,7 +22,7 @@ interface UserLocation {
   longitude: number;
 }
 
-export default function ProductDiscovery({ onBack }: ProductDiscoveryProps) {
+export default function ProductDiscovery({ onBack, user, onSignOut, onProfileClick, onLogin, onSignUp }: ProductDiscoveryProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
@@ -133,8 +139,42 @@ export default function ProductDiscovery({ onBack }: ProductDiscoveryProps) {
               )}
             </div>
 
-            <div className="text-sky-200/60 text-sm">
-              {products.length} products
+            <div className="flex items-center gap-3">
+              {user ? (
+                <>
+                  <button
+                    onClick={onProfileClick}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
+                  >
+                    <UserIcon size={16} />
+                    Profile
+                  </button>
+                  <button
+                    onClick={onSignOut}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={onLogin}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
+                  >
+                    <LogIn size={16} />
+                    Login
+                  </button>
+                  <button
+                    onClick={onSignUp}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 transition-smooth text-sm"
+                  >
+                    <UserPlus size={16} />
+                    Sign Up
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </header>
