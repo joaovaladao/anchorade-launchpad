@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, Mail, Calendar, User as UserIcon, Save, Anchor, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, Mail, Calendar, User as UserIcon, Save, Anchor } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
 interface UserProfileProps {
   user: User;
   onBack: () => void;
   onSignOut: () => void;
-  onBrowseProducts: () => void;
 }
 
-export default function UserProfile({ user, onBack, onSignOut, onBrowseProducts }: UserProfileProps) {
+export default function UserProfile({ user, onBack, onSignOut }: UserProfileProps) {
   const [fullName, setFullName] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -143,15 +142,6 @@ export default function UserProfile({ user, onBack, onSignOut, onBrowseProducts 
               <div className="text-sky-400 text-sm font-medium mb-2">User ID</div>
               <p className="text-sky-100/60 text-sm font-mono break-all">{user.id}</p>
             </div>
-
-            {/* Browse Products button */}
-            <button
-              onClick={onBrowseProducts}
-              className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-sky-600 to-sky-500 hover:from-sky-500 hover:to-sky-400 text-white font-semibold rounded-2xl shadow-lg shadow-sky-500/20 transition-all mt-6"
-            >
-              <ShoppingBag size={20} />
-              Browse Available Products
-            </button>
           </div>
         </main>
       </div>
