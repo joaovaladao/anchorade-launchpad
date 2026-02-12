@@ -11,6 +11,7 @@ function App() {
 
   const [currentScreen, setCurrentScreen] = useState<'entry' | 'discovery' | 'auth'>('entry');
   const [showProfile, setShowProfile] = useState(false);
+  const [showDiscoveryAsUser, setShowDiscoveryAsUser] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   const handleSignOut = async () => {
@@ -28,12 +29,21 @@ function App() {
 
   // If logged in, show dashboard or profile
   if (user) {
+    if (showDiscoveryAsUser) {
+      return (
+        <ProductDiscovery onBack={() => setShowDiscoveryAsUser(false)} />
+      );
+    }
     if (showProfile) {
       return (
         <UserProfile
           user={user}
           onBack={() => setShowProfile(false)}
           onSignOut={handleSignOut}
+          onBrowseProducts={() => {
+            setShowProfile(false);
+            setShowDiscoveryAsUser(true);
+          }}
         />
       );
     }
