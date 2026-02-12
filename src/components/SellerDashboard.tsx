@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Pencil, Trash2, LogOut, Package, X, Check, User as UserIcon } from 'lucide-react';
+import { Plus, Pencil, Trash2, LogOut, Package, X, Check, User as UserIcon, ShoppingBag } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
 
 interface Product {
@@ -47,9 +47,10 @@ interface SellerDashboardProps {
   user: User;
   onSignOut: () => void;
   onProfileClick: () => void;
+  onBrowseProducts: () => void;
 }
 
-export default function SellerDashboard({ user, onSignOut, onProfileClick }: SellerDashboardProps) {
+export default function SellerDashboard({ user, onSignOut, onProfileClick, onBrowseProducts }: SellerDashboardProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -194,13 +195,22 @@ export default function SellerDashboard({ user, onSignOut, onProfileClick }: Sel
                 <p className="text-sky-300/70 text-xs">{displayName}</p>
               </div>
             </div>
-            <button
-              onClick={onSignOut}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
-            >
-              <LogOut size={16} />
-              Sign out
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onBrowseProducts}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
+              >
+                <ShoppingBag size={16} />
+                Browse Products
+              </button>
+              <button
+                onClick={onSignOut}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 transition-smooth text-sm"
+              >
+                <LogOut size={16} />
+                Sign out
+              </button>
+            </div>
           </div>
         </header>
 

@@ -40,10 +40,6 @@ function App() {
           user={user}
           onBack={() => setShowProfile(false)}
           onSignOut={handleSignOut}
-          onBrowseProducts={() => {
-            setShowProfile(false);
-            setShowDiscoveryAsUser(true);
-          }}
         />
       );
     }
@@ -52,6 +48,7 @@ function App() {
         user={user}
         onSignOut={handleSignOut}
         onProfileClick={() => setShowProfile(true)}
+        onBrowseProducts={() => setShowDiscoveryAsUser(true)}
       />
     );
   }
